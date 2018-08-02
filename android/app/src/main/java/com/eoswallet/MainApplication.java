@@ -3,6 +3,11 @@ package com.eoswallet;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.tradle.react.UdpSocketsModule;
+import com.peel.react.TcpSocketsModule;
+import com.bitgo.randombytes.RandomBytesPackage;
+import com.peel.react.rnos.RNOSModule;
+import net.rhogan.rnsecurerandom.RNSecureRandomPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
@@ -22,7 +27,12 @@ public class MainApplication extends Application implements ReactApplication {
     @Override
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
-          new MainReactPackage()
+          new MainReactPackage(),
+            new UdpSocketsModule(),
+            new TcpSocketsModule(),
+            new RandomBytesPackage(),
+            new RNOSModule(),
+            new RNSecureRandomPackage()
       );
     }
 

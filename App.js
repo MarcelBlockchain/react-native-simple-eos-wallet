@@ -6,9 +6,9 @@
  * @flow
  */
 
-import React, {Component} from 'react';
+import React, {Component} from '../Library/Caches/typescript/2.9/node_modules/@types/react';
 import {Platform, StyleSheet, Text, View} from 'react-native';
-
+import {get_info} from './EOS_example.js'
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
   android:
@@ -16,14 +16,28 @@ const instructions = Platform.select({
     'Shake or press menu button for dev menu',
 });
 
-type Props = {};
-export default class App extends Component<Props> {
+export default class App extends Component {
+
+  state = {
+    'head_block_producer': 'Unloaded',
+    'chain_id': 'Unloaded'
+  }
+
+  componentDidMount(){
+    get_info().then(info => {
+      this.setState({
+        'head_block_producer': info['head_block_producer'],
+        'chain_id': info['chain_id']
+      })
+    });
+  }
+
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.welcome}>Welcome to React Native!</Text>
-        <Text style={styles.instructions}>To get started, edit App.js</Text>
-        <Text style={styles.instructions}>{instructions}</Text>
+        <Text style={styles.welcome}>EOSJS React-Native Example</Text>
+        <Text style={styles.instructions}>Head Block Producer: {this.state.head_block_producer}</Text>
+        <Text style={styles.instructions}>Chain Id {this.state.chain_id}</Text>
       </View>
     );
   }
