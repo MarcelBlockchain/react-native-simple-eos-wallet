@@ -34,7 +34,7 @@ export const getBlockHeightP = () =>
   });
 
 export const getBlockHeight = async () => {
-  const result = await this.getBlockHeightP();
+  const result = await getBlockHeightP();
   console.log('current block height: ', result.head_block_num);
   return result.head_block_num;
 };
@@ -48,7 +48,7 @@ export const getCurrentBlockInfoP = () =>
   });
 
 export const getCurrentBlockInfo = async () => {
-  const result = await this.getCurrentBlockInfoP();
+  const result = await getCurrentBlockInfoP();
   console.log('current block info: ', result);
   return result;
 };
@@ -68,7 +68,7 @@ export const generateRandomPrivKeyP = () =>
   });
 
 export const generateRandomPrivKey = async () => {
-  const output = await this.generateRandomPrivKeyP();
+  const output = await generateRandomPrivKeyP();
   console.log('random private key: ', output);
   return output;
 };
@@ -108,7 +108,7 @@ export const getAccountNamesFromPubKeyP = pubKey =>
 
 // main net only:
 export const getAccountNamesFromPubKey = async pubKey => {
-  const result = await this.getAccountNamesFromPubKeyP(pubKey);
+  const result = await getAccountNamesFromPubKeyP(pubKey);
   console.log('account names from pubKey: ', result);
   return result;
 };
@@ -125,11 +125,11 @@ export const getAccSystemStatsP = id =>
 //  main net only: (i.e. 'binancecleos'):
 export const getAccSystemStats = async id => {
   try {
-    const result = await this.getAccSystemStatsP(id);
+    const result = await getAccSystemStatsP(id);
     // console.log(result); //whole object
     let { cpu_weight, net_weight, ram_bytes } = result;
-    if (cpu_weight != null) cpu_weight = this.toFloat(cpu_weight);
-    if (net_weight != null) net_weight = this.toFloat(net_weight);
+    if (cpu_weight != null) cpu_weight = toFloat(cpu_weight);
+    if (net_weight != null) net_weight = toFloat(net_weight);
     console.log(`account infos for ${id}:`);
     console.log('CPU weight in EOS: ', cpu_weight);
     console.log('net weight in EOS: ', net_weight);
@@ -212,8 +212,8 @@ export const transferSignPushTransaction = async (from, to, quantity, memo = '')
   // creates 1) unsigned transaction 2) signs 3) broadcasts tr
   const tr = await eos.transfer(from, to, quantity, memo, { broadcast: false, sign: false });
   console.log('created unsigned tr: ', tr);
-  const signedTr = await this.signTr(tr, from, to, quantity, memo);
-  await this.pushTransaction(signedTr.transaction);
+  const signedTr = await signTr(tr, from, to, quantity, memo);
+  await pushTransaction(signedTr.transaction);
 };
 
 //  just signs the transaction and returns it:
@@ -227,7 +227,7 @@ export const getSignature = async (from, to, quantity, memo = '') => {
 
 //  signs transaction and returns it. Args: (transaction, from, to, quantity, memo = '')
 export const signTr = async (tr, from, to, quantity, memo = '') => {
-  const sig = await this.getSignature(from, to, quantity, memo);
+  const sig = await getSignature(from, to, quantity, memo);
   tr.transaction.signatures.push(sig);
   return tr;
 };
@@ -255,16 +255,16 @@ export const getOutgoingTransactionsP = async accountName =>
           ...obj,
           to,
           from,
-          quantity: this.toFloat(quantity),
+          quantity: toFloat(quantity),
           memo,
         };
-      } else if (name === 'buyram') obj = { ...obj, payer, quant: this.toFloat(quant), receiver };
+      } else if (name === 'buyram') obj = { ...obj, payer, quant: toFloat(quant), receiver };
       else if (name === 'buyrambytes') obj = { ...obj, payer, receiver, bytes };
       else if (name === 'delegatebw') {
         obj = {
           ...obj,
-          stake_cpu_quantity: this.toFloat(stake_cpu_quantity), // unit in EOS
-          stake_net_quantity: this.toFloat(stake_net_quantity), // unit in EOS
+          stake_cpu_quantity: toFloat(stake_cpu_quantity), // unit in EOS
+          stake_net_quantity: toFloat(stake_net_quantity), // unit in EOS
           transfer,
         };
       } else if (name === 'newaccount') {
@@ -291,7 +291,7 @@ export const getOutgoingTransactionsP = async accountName =>
 
 //  accountName, (+ int allAboveBlockHeightX --> optional)
 export const getOutgoingTransactions = async (accountName, height) => {
-  const result = await this.getOutgoingTransactionsP(accountName);
+  const result = await getOutgoingTransactionsP(accountName);
   if (!height) {
     console.log(`outgoing transactions of ${accountName}: `, result);
     return result;
@@ -304,7 +304,7 @@ export const getOutgoingTransactions = async (accountName, height) => {
 
 export const getTransactionP = async (id, blockNumHint) =>
   new Promise(async (resolve, reject) => {
-    const blockHeight = await this.getBlockHeight();
+    const blockHeight = await getBlockHeight();
     await eos.getTransaction(id, blockNumHint, (error, info) => {
       const res = {};
       if (error) reject(error);
@@ -331,7 +331,7 @@ export const getTransactionP = async (id, blockNumHint) =>
 //  get transaction info. Optionally with a block number hint (trBlockHeight)
 //  note: example tr only visible when switching to main net
 export const getTransaction = async (id, blockNumHint) => {
-  const result = await this.getTransactionP(id, blockNumHint);
+  const result = await getTransactionP(id, blockNumHint);
   console.log('transaction details: ', result);
   return result;
 };
@@ -345,7 +345,7 @@ export const isTransactionExecutedP = async (id, blockNumHint) =>
   });
 
 export const isTransactionExecuted = async (id, blockNumHint) => {
-  const executed = await this.isTransactionExecutedP(id, blockNumHint);
+  const executed = await isTransactionExecutedP(id, blockNumHint);
   console.log(`transaction: ${id} \nwas executed: ${executed}`);
   return executed;
 };
@@ -363,7 +363,7 @@ export const getCurrencyBalanceP = (accountName, contractName = 'eosio.token') =
   });
 
 export const getCurrencyBalance = async (accountName, contractName = 'eosio.token') => {
-  const result = await this.getCurrencyBalanceP(accountName, contractName);
+  const result = await getCurrencyBalanceP(accountName, contractName);
   console.log(`balance of ${accountName}: `, result);
 };
 
@@ -380,7 +380,7 @@ export const getCurrencyStatsP = (symbol, contractName) =>
 // works for tokens as well, see https://github.com/eoscafe/eos-airdrops
 // 'SYMBOL', 'eos.contractName'
 export const getCurrencyStats = async (symbol, contractName = 'eosio.token') => {
-  const result = await this.getCurrencyStatsP(symbol, contractName);
+  const result = await getCurrencyStatsP(symbol, contractName);
   console.log(result);
   return result;
 };

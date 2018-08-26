@@ -34,8 +34,8 @@ export default class App extends Component {
 
 // ----BLOCKCHAIN----
 // eos.getBlockHeight()
-// eos.getCurrentBlockInfo()
-// async main (alles rein)
+eos.getCurrentBlockInfo()
+
 // ----KEYS----
 //  more infos: https://github.com/EOSIO/eosjs-ecc/blob/master/src/key_private.js
 //  seed: 'string' any length string. This is private. The same seed produces the same
@@ -84,7 +84,7 @@ export default class App extends Component {
 // eos.getOutgoingTransactions(accBinance)
 //  perform transaction and add the id + block number as args
 //  note: example tr only visible when switching to main net
-eos.getTransaction(exampleTrxMainNet, trBlockHeight) // sender: 'binancecleos' on main net
+// eos.getTransaction(exampleTrxMainNet, trBlockHeight) // sender: 'binancecleos' on main net
 // eos.isTransactionExecuted(exampleTrxMainNet, trBlockHeight)
 
 // ----CURRENCY----
