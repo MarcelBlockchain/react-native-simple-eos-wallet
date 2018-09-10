@@ -1,5 +1,3 @@
-// "eslint:recommended", "plugin:react/recommended"
-// eslint-config-standard eslint-config-standard-react eslint-plugin-import eslint-plugin-node eslint-plugin-promise eslint-plugin-react eslint-plugin-react-native eslint-plugin-standard
 import React, { Component } from 'react'
 import { Platform, StyleSheet, Text, View } from 'react-native'
 import * as eos from './eos'
