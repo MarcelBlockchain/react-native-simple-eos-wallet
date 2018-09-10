@@ -19,6 +19,13 @@ eos.getCurrentBlockInfo()
 * more infos: https://github.com/EOSIO/eosjs-ecc/blob/master/src/key_private.js  
 * seed: any length string. This is private. The same seed produces the same private key every time. At least 128 random bits should be used to produce a good private key.
 ```js
+//  src: https://github.com/bitcoinjs/bip39/blob/master/index.js
+//  Generates a random mnemonic (uses crypto.randomBytes under the hood), defaults to //  128-bits of entropy
+//  strength = 256 for 24 words, 128 for 12
+eos.generateMnemonic(128)
+//  derives the master, owner & active private and public keys from mnemonic
+eos.deriveFromMnemonic(eos.generateMnemonic(128))
+//  uses "crypto": "react-native-crypto" for real random bytes
 eos.generateRandomPrivKey()
 console.log(eos.generatePrivKeyFromSeed('SEED123'))
 eos.fromPrivToPub(privKeyTest)
